@@ -65,8 +65,8 @@ const Sidebar: React.FC<ExpandInterface> = ({ isExpanded, setIsExpanded }) => {
         {/* Recent chats */}
         <div>
             <span className={`transition-all duration-200 ease-linear delay-100 ${isExpanded ? "visible opacity-100" : "invisible opacity-0"}`}>Recent</span>
-            <div className={`${!isExpanded ? "hidden" : ""}`}>
-                <RecentPrompts />
+            <div className={`mt-3 flex flex-col gap-3 ${!isExpanded ? "hidden" : ""}`}>
+                <RecentPrompts title={'What is HTML'}/>
             </div>
         </div>
       </div>

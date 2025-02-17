@@ -36,7 +36,7 @@ const Sidebar: React.FC<ExpandInterface> = ({ isExpanded, setIsExpanded }) => {
 
   return (
     <div
-      className={`p-3 bg-[#282a2c] fixed h-[100%] flex flex-col gap-3 transition-all duration-200 ease-linear
+      className={`p-3 bg-[#282a2c]  h-[100%] flex flex-col gap-3 transition-all duration-200 ease-linear
         ${isExpanded ? "w-[300px]" : "w-[50px] overflow-hidden"}`}>
       {/* Hamburger Menu (Manual Control) */}
       <div
@@ -66,7 +66,7 @@ const Sidebar: React.FC<ExpandInterface> = ({ isExpanded, setIsExpanded }) => {
         <div>
             <span className={`transition-all duration-200 ease-linear delay-100 ${isExpanded ? "visible opacity-100" : "invisible opacity-0"}`}>Recent</span>
             <div className={`mt-3 flex flex-col gap-3 ${!isExpanded ? "hidden" : ""}`}>
-                <RecentPrompts title={'What is HTML'}/>
+                <RecentPrompts isExpanded={isExpanded} title={'What is HTML'}/>
             </div>
         </div>
       </div>

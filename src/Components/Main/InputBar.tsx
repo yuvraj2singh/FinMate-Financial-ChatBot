@@ -8,15 +8,14 @@ const InputBar = () => {
   const [loading , setLoading] = useState(false);
   const [data , setData] = useState("");
   const getData = async (prompt: string) => {
+    setLoading(true);
     const data = await runChat(prompt);
-    if (!data) setLoading(true);
-    else {
-        setLoading(false);
-        setData(data);
-    }
+    setData(data);
+    setLoading(false);
+    
   };
   useEffect(() => {
-    if (prompt.trim() != "" || prompt.length != 0) {
+    if (prompt.trim() != "" ) {
       getData(prompt);
     }
   }, [prompt]);

@@ -30,7 +30,7 @@ function App() {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [lineData, setLineData] = useState<string[]>([]);
-  const [user, setUser] = useState("Yuvraj");
+  const user = "Yuvraj";
   const [recentPrompts, setRecentPrompts] = useState<string[]>([]);
 
   // 🔹 Load recent prompts from localStorage on first load

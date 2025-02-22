@@ -1,5 +1,5 @@
 /// <reference lib="dom" />
-
+/// <reference types="node" />
 import { IoSend } from "react-icons/io5";
 import { FaMicrophone, FaMicrophoneSlash } from "react-icons/fa";
 import { useContext, useEffect, useState, useRef } from "react";

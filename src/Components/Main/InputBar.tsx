@@ -20,7 +20,8 @@ const InputBar: React.FC = () => {
   // Initialize Speech Recognition once
   useEffect(() => {
     const SpeechRecognitionAPI =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      (window as any).SpeechRecognition ||
+      (window as any).webkitSpeechRecognition;
 
     if (SpeechRecognitionAPI) {
       recognitionRef.current = new SpeechRecognitionAPI() as SpeechRecognition;
@@ -83,7 +84,7 @@ const InputBar: React.FC = () => {
   }, [inputVal, SendPrompt]);
 
   return (
-    <div className="fixed z-10 w-full bg-[#1b1c1d] bottom-12 flex justify-center items-center">
+    <div className=" fixed z-10 w-full bg-[#1b1c1d] bottom-12 flex justify-center items-center">
       <input
         className="mx-3 relative w-[600px] border-gray-500 border rounded-4xl px-8 py-4 focus:outline-none"
         type="text"
@@ -93,19 +94,19 @@ const InputBar: React.FC = () => {
       />
 
       {/* Speech-to-Text Button */}
-      <div
-        onClick={isListening ? stopListening : startListening}
-        className="relative -left-16 text-2xl p-3 bg-gray-800 rounded-full hover:bg-gray-700 transition-all duration-200 cursor-pointer"
-      >
-        {isListening ? <FaMicrophoneSlash /> : <FaMicrophone />}
-      </div>
+      <div className="flex gap-2 relative -left-28">
+        <div
+          onClick={isListening ? stopListening : startListening}
+          className=" text-xl p-2 bg-gray-800 rounded-full hover:bg-gray-700 transition-all duration-200 cursor-pointer">
+          {isListening ? <FaMicrophoneSlash /> : <FaMicrophone />}
+        </div>
 
-      {/* Send Button */}
-      <div
-        onClick={SendPrompt}
-        className="relative -left-12 text-2xl p-3 bg-gray-800 rounded-full hover:bg-gray-700 transition-all duration-200 cursor-pointer"
-      >
-        <IoSend />
+        {/* Send Button */}
+        <div
+          onClick={SendPrompt}
+          className=" text-xl p-2 bg-gray-800 rounded-full hover:bg-gray-700 transition-all duration-200 cursor-pointer">
+          <IoSend />
+        </div>
       </div>
     </div>
   );

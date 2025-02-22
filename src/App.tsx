@@ -16,8 +16,10 @@ interface ContextType {
   loading: boolean;
   setLoading: (value: boolean) => void;
   lineData: string[];
+  setLineData: (value: string[]) => void;
   user: string;
   recentPrompts: string[];
+  SendPrompt: () => void;
 }
 
 export const Context = createContext<ContextType | null>(null);
@@ -43,11 +45,14 @@ function App() {
   // 🔹 Function to store new prompt & update local storage
   const addPrompt = (newPrompt: string) => {
     if (newPrompt.trim() === "") return;
-  
+
     setRecentPrompts((prev) => {
       // Remove duplicates and maintain order
-      const updatedPrompts = [newPrompt, ...prev.filter((p) => p !== newPrompt)].slice(0, 10); // Keep last 10 prompts
-  
+      const updatedPrompts = [
+        newPrompt,
+        ...prev.filter((p) => p !== newPrompt),
+      ].slice(0, 10); // Keep last 10 prompts
+
       localStorage.setItem("recentPrompts", JSON.stringify(updatedPrompts)); // Save to local storage
       return updatedPrompts;
     });
@@ -68,6 +73,13 @@ function App() {
     }
   }, [prompt]);
 
+  const SendPrompt = () => {
+    if (inputVal.trim() !== "") {
+      setPrompt(inputVal);
+      setInputVal("");
+    }
+  };
+
   return (
     <Context.Provider
       value={{
@@ -79,11 +91,12 @@ function App() {
         setPrompt,
         loading,
         setLoading,
-        lineData,
+        lineData: lineData || [], // 🔹 Ensure it's always an array
+        setLineData,
         user,
-        recentPrompts,
-      }}
-    >
+        recentPrompts: recentPrompts || [], // 🔹 Ensure it's always an array
+        SendPrompt,
+      }}>
       <div className="overflow-hidden h-[100vh] flex text-white">
         <div className="hidden sm:block">
           <Sidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />

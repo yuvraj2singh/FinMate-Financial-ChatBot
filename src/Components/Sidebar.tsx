@@ -14,7 +14,7 @@ const Sidebar: React.FC<ExpandInterface> = ({ isExpanded, setIsExpanded }) => {
     throw new Error("Context not found");
   }
 
-  const { recentPrompts, setPrompt } = context;
+  const { recentPrompts, setPrompt, setInputVal ,setLineData} = context;
 
   const [isManualExpand, setIsManualExpand] = useState(false);
 
@@ -39,6 +39,13 @@ const Sidebar: React.FC<ExpandInterface> = ({ isExpanded, setIsExpanded }) => {
     setIsExpanded(prev => !prev);
   };
 
+  // 🔹 Handle New Chat Reset
+  const handleNewChat = () => {
+    setPrompt(""); // Clear the prompt
+    setInputVal(""); // Clear input field
+    setLineData([]); // Clear previous responses
+  };
+
   return (
     <div
       className={`p-3 bg-[#282a2c] h-[100%] flex flex-col gap-3 transition-all duration-200 ease-linear
@@ -54,18 +61,15 @@ const Sidebar: React.FC<ExpandInterface> = ({ isExpanded, setIsExpanded }) => {
 
       {/* Main Sidebar Content (Hover Control) */}
       <div className="w-full h-full" onMouseEnter={mouseIn} onMouseLeave={mouseOut}>
-        <div className="text-xl my-10 p-2 rounded-full hover:bg-gray-700 cursor-pointer flex items-center w-fit">
+        <button
+          onClick={handleNewChat} // 🔹 Reset chat on click
+          className="text-xl my-10 p-2 rounded-full hover:bg-gray-700 cursor-pointer flex items-center w-fit"
+        >
           <GoPlus />
-          <div
-            className={`transition-all duration-500 ${
-              isExpanded ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <span className={`text-lg transition-all duration-500 ${!isExpanded ? "hidden" : ""}`}>
-              New Chat
-            </span>
-          </div>
-        </div>
+          <span className={`ml-2 text-lg transition-all duration-500 ${!isExpanded ? "hidden" : ""}`}>
+            New Chat
+          </span>
+        </button>
 
         {/* Recent Chats */}
         <div>
@@ -76,8 +80,8 @@ const Sidebar: React.FC<ExpandInterface> = ({ isExpanded, setIsExpanded }) => {
           >
             Recent
           </span>
-          <div className={`mt-3 flex flex-col gap-3 ${!isExpanded ? "hidden" : ""}`}>
-            {recentPrompts.map((prompt:string, index:number) => (
+          <div className={`mt-3 h-[300px] overflow-scroll flex flex-col gap-3 ${!isExpanded ? "hidden" : ""}`}>
+            {recentPrompts.map((prompt: string, index: number) => (
               <button
                 key={index}
                 onClick={() => setPrompt(prompt)} // Click to re-run prompt

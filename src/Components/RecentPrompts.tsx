@@ -8,7 +8,7 @@ interface recentPrompts {
   title: string;
 }
 
-const RecentPrompts: React.FC<recentPrompts> = ({ isExpanded, title }) => {
+const RecentPrompts: React.FC<recentPrompts> = ({title }) => {
   const [hiddenSettings, setHiddenSettings] = useState(true);
   return (
     <div

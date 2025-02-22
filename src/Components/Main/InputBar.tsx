@@ -1,21 +1,68 @@
 import { IoSend } from "react-icons/io5";
-import { useContext, useEffect } from "react";
+import { FaMicrophone, FaMicrophoneSlash } from "react-icons/fa";
+import { useContext, useEffect, useState, useRef } from "react";
 import { Context } from "../../App";
 
-const InputBar = () => {
+const InputBar: React.FC = () => {
   const context = useContext(Context);
+  const [isListening, setIsListening] = useState<boolean>(false);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   if (!context) {
     throw new Error("InputBar must be used within a Context Provider");
   }
 
-  const { inputVal, setInputVal, setPrompt } = context;
+  const { inputVal, setInputVal, SendPrompt } = context;
 
-  // Function to send the prompt
-  const SendPrompt = () => {
-    if (inputVal.trim() !== "") {
-      setPrompt(inputVal);
-      setInputVal("");
+  // Initialize Speech Recognition once
+  useEffect(() => {
+    const SpeechRecognitionAPI =
+      window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    if (SpeechRecognitionAPI) {
+      recognitionRef.current = new SpeechRecognitionAPI();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = true;
+      recognitionRef.current.lang = "en-US";
+
+      recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
+        const transcript = Array.from(event.results)
+          .map((result) => result[0].transcript)
+          .join("");
+        setInputVal(transcript);
+
+        // Clear previous timeout
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+        // Set a timeout to auto-send after 2 seconds
+        timeoutRef.current = setTimeout(() => {
+          SendPrompt();
+        }, 2000);
+      };
+
+      recognitionRef.current.onerror = (event) => {
+        console.error("Speech recognition error:", event.error);
+        setIsListening(false);
+      };
+
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      };
+    }
+  }, [setInputVal, SendPrompt]);
+
+  const startListening = () => {
+    if (recognitionRef.current) {
+      setIsListening(true);
+      recognitionRef.current.start();
+    }
+  };
+
+  const stopListening = () => {
+    if (recognitionRef.current) {
+      setIsListening(false);
+      recognitionRef.current.stop();
     }
   };
 
@@ -28,12 +75,10 @@ const InputBar = () => {
     };
 
     window.addEventListener("keydown", handleKeyPress);
-
-    // Cleanup function to remove the event listener
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [inputVal]); // Runs whenever `inputVal` changes
+  }, [inputVal, SendPrompt]);
 
   return (
     <div className="fixed z-10 w-full bg-[#1b1c1d] bottom-12 flex justify-center items-center">
@@ -44,9 +89,19 @@ const InputBar = () => {
         onChange={(e) => setInputVal(e.target.value)}
         placeholder="Ask FinMate"
       />
+
+      {/* Speech-to-Text Button */}
+      <div
+        onClick={isListening ? stopListening : startListening}
+        className="relative -left-16 text-2xl p-3 bg-gray-800 rounded-full hover:bg-gray-700 transition-all duration-200 cursor-pointer"
+      >
+        {isListening ? <FaMicrophoneSlash /> : <FaMicrophone />}
+      </div>
+
+      {/* Send Button */}
       <div
         onClick={SendPrompt}
-        className="relative -left-16 text-2xl p-3 bg-gray-800 rounded-full hover:bg-gray-700 transition-all duration-200 cursor-pointer"
+        className="relative -left-12 text-2xl p-3 bg-gray-800 rounded-full hover:bg-gray-700 transition-all duration-200 cursor-pointer"
       >
         <IoSend />
       </div>

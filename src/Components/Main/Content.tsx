@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Context } from "../../App";
 import Chats from "./Chats";
+import FirstPage from "./FirstPage";
 
 const Content = () => {
   const context = useContext(Context);
@@ -17,9 +18,7 @@ const Content = () => {
       {prompt ? (
         <Chats />
       ) : (
-        <div className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-600 text-4xl font-bold flex justify-center items-center h-[80vh]">
-          Hello, {user}
-        </div>
+        <FirstPage />
       )}
     </>
   );

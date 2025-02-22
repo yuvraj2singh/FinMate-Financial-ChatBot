@@ -12,7 +12,7 @@ const Chats = () => {
   }
   const {loading } = context;
   return (
-  <div className=" p-4 lg:w-[750px] m-auto h-[450px] overflow-scroll rounded-3xl scrollbar-hide">
+  <div className=" p-4 lg:w-[750px] m-auto h-[450px] overflow-scroll rounded-3xl no-scrollbar">
     <p className="text-white"><Prompt /></p>
     {loading ? <Loading /> : 
     <ErrorBoundary>

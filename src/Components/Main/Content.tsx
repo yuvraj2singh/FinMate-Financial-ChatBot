@@ -11,7 +11,7 @@ const Content = () => {
     throw new Error("Content must be used within a Context Provider");
   }
 
-  const {prompt,user} = context;
+  const {prompt} = context;
 
   return (
     <>

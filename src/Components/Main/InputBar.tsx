@@ -1,3 +1,5 @@
+/// <reference lib="dom" />
+
 import { IoSend } from "react-icons/io5";
 import { FaMicrophone, FaMicrophoneSlash } from "react-icons/fa";
 import { useContext, useEffect, useState, useRef } from "react";
@@ -18,10 +20,10 @@ const InputBar: React.FC = () => {
   // Initialize Speech Recognition once
   useEffect(() => {
     const SpeechRecognitionAPI =
-      window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
     if (SpeechRecognitionAPI) {
-      recognitionRef.current = new SpeechRecognitionAPI();
+      recognitionRef.current = new SpeechRecognitionAPI() as SpeechRecognition;
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = "en-US";

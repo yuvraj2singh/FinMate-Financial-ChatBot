@@ -1,11 +1,13 @@
+import { IoLogoIonitron } from "react-icons/io";
+
 import { CgMenuGridR } from "react-icons/cg";
 const Navbar = () => {
   return (
     <div className="flex m-3 justify-between">
       <div className="flex gap-1 px-2 hover:bg-neutral-700 rounded-xl cursor-pointer">
-        <div className="flex flex-col">
+        <div className="flex gap-2 items-center">
+          <span className="text-3xl"><IoLogoIonitron/></span>
           <span className="text-xl">FinMate</span>
-          <span className="text-gray-400">2.0 Flash</span>
         </div>
       </div>
 

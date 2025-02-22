@@ -7,7 +7,7 @@ const FirstPage: React.FC = () => {
     throw new Error("No content found");
   }
 
-  const { user, setInputVal, setPrompt, SendPrompt } = context;
+  const { user, setPrompt, SendPrompt } = context;
 
   // Function to set input and send the prompt
   const setInput = (text: string) => {

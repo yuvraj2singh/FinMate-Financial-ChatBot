@@ -1,29 +1,40 @@
 import { IoSend } from "react-icons/io5";
-import runChat from "../../config/gemini";
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
+import { Context } from "../../App";
 
 const InputBar = () => {
-  const [inputVal, setInputVal] = useState("");
-  const [prompt, setPrompt] = useState("");
-  const [loading , setLoading] = useState(false);
-  const [data , setData] = useState("");
-  const getData = async (prompt: string) => {
-    setLoading(true);
-    const data = await runChat(prompt);
-    setData(data);
-    setLoading(false);
-    
-  };
-  useEffect(() => {
-    if (prompt.trim() != "" ) {
-      getData(prompt);
-    }
-  }, [prompt]);
+  const context = useContext(Context);
 
+  if (!context) {
+    throw new Error("InputBar must be used within a Context Provider");
+  }
+
+  const { inputVal, setInputVal, setPrompt } = context;
+
+  // Function to send the prompt
   const SendPrompt = () => {
-    setPrompt(inputVal);
-    setInputVal("");
+    if (inputVal.trim() !== "") {
+      setPrompt(inputVal);
+      setInputVal("");
+    }
   };
+
+  // Event listener for Enter key press
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        SendPrompt();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+
+    // Cleanup function to remove the event listener
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [inputVal]); // Runs whenever `inputVal` changes
+
   return (
     <div className="fixed z-10 w-full bg-[#1b1c1d] bottom-12 flex justify-center items-center">
       <input
@@ -34,11 +45,13 @@ const InputBar = () => {
         placeholder="Ask Gemini"
       />
       <div
-        onClick={() => SendPrompt()}
-        className=" relative -left-16 text-2xl p-3 bg-gray-800 rounded-full hover:bg-gray-700 transition-all duration-200 cursor-pointer">
+        onClick={SendPrompt}
+        className="relative -left-16 text-2xl p-3 bg-gray-800 rounded-full hover:bg-gray-700 transition-all duration-200 cursor-pointer"
+      >
         <IoSend />
       </div>
     </div>
   );
 };
+
 export default InputBar;

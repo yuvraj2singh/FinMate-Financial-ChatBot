@@ -1,7 +1,7 @@
 import { RxHamburgerMenu } from "react-icons/rx";
 import { GoPlus } from "react-icons/go";
-import { useState } from "react";
-import RecentPrompts from "./RecentPrompts";
+import { useContext, useState } from "react";
+import { Context } from "../App";
 
 interface ExpandInterface {
   isExpanded: boolean;
@@ -9,7 +9,13 @@ interface ExpandInterface {
 }
 
 const Sidebar: React.FC<ExpandInterface> = ({ isExpanded, setIsExpanded }) => {
-  // Track manual click on the hamburger
+  const context = useContext(Context);
+  if (!context) {
+    throw new Error("Context not found");
+  }
+
+  const { recentPrompts, setPrompt } = context;
+
   const [isManualExpand, setIsManualExpand] = useState(false);
 
   const mouseIn = () => {
@@ -29,19 +35,20 @@ const Sidebar: React.FC<ExpandInterface> = ({ isExpanded, setIsExpanded }) => {
   };
 
   const handleHamburgerClick = () => {
-    // Toggle the sidebar and lock it in the expanded state if opened manually
-    setIsManualExpand((prev) => !prev);
-    setIsExpanded((prev) => !prev);
+    setIsManualExpand(prev => !prev);
+    setIsExpanded(prev => !prev);
   };
 
   return (
     <div
-      className={`p-3 bg-[#282a2c]  h-[100%] flex flex-col gap-3 transition-all duration-200 ease-linear
-        ${isExpanded ? "w-[300px]" : "w-[50px] overflow-hidden"}`}>
+      className={`p-3 bg-[#282a2c] h-[100%] flex flex-col gap-3 transition-all duration-200 ease-linear
+        ${isExpanded ? "w-[300px]" : "w-[50px] overflow-hidden"}`}
+    >
       {/* Hamburger Menu (Manual Control) */}
       <div
         onClick={handleHamburgerClick}
-        className="my-4 p-2 hover:bg-gray-700 rounded-full cursor-pointer w-fit">
+        className="my-4 p-2 hover:bg-gray-700 rounded-full cursor-pointer w-fit"
+      >
         <RxHamburgerMenu />
       </div>
 
@@ -52,22 +59,34 @@ const Sidebar: React.FC<ExpandInterface> = ({ isExpanded, setIsExpanded }) => {
           <div
             className={`transition-all duration-500 ${
               isExpanded ? "opacity-100" : "opacity-0"
-            }`}>
-            <span
-              className={`text-lg transition-all duration-500 ${
-                !isExpanded ? "hidden" : ""
-              }`}>
+            }`}
+          >
+            <span className={`text-lg transition-all duration-500 ${!isExpanded ? "hidden" : ""}`}>
               New Chat
             </span>
           </div>
         </div>
 
-        {/* Recent chats */}
+        {/* Recent Chats */}
         <div>
-            <span className={`transition-all duration-200 ease-linear delay-100 ${isExpanded ? "visible opacity-100" : "invisible opacity-0"}`}>Recent</span>
-            <div className={`mt-3 flex flex-col gap-3 ${!isExpanded ? "hidden" : ""}`}>
-                <RecentPrompts isExpanded={isExpanded} title={'What is HTML'}/>
-            </div>
+          <span
+            className={`transition-all duration-200 ease-linear delay-100 ${
+              isExpanded ? "visible opacity-100" : "invisible opacity-0"
+            }`}
+          >
+            Recent
+          </span>
+          <div className={`mt-3 flex flex-col gap-3 ${!isExpanded ? "hidden" : ""}`}>
+            {recentPrompts.map((prompt:string, index:number) => (
+              <button
+                key={index}
+                onClick={() => setPrompt(prompt)} // Click to re-run prompt
+                className="text-left p-2 rounded-md bg-gray-700 hover:bg-gray-600"
+              >
+                {prompt}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>

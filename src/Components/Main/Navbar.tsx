@@ -16,12 +16,6 @@ const Navbar = () => {
       </div>
 
       <div className="flex gap-3 items-center">
-        <div className="flex gap-2 items-center bg-gray-600 hover:bg-gray-500 transition-all duration-200 cursor-pointer px-3 py-2 h-fit rounded-xl">
-          <span className="text-orange-500">
-            <SiGooglegemini />
-          </span>
-          <span className="text-sm">Try Gemini Advanced</span>
-        </div>
         <div className="text-3xl rounded-full hover:bg-neutral-700 transition-all duration-200 p-2 cursor-pointer">
           <CgMenuGridR />
         </div>

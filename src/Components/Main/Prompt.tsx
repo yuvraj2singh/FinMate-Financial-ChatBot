@@ -10,7 +10,7 @@ const Prompt = () => {
 
   return (
     <div className="w-full flex justify-end">
-        <div className="p-3 bg-purple-400 rounded-l-3xl rounded-tr-3xl">
+        <div className="p-3 bg-purple-700 rounded-l-3xl rounded-tr-3xl">
         {prompt}</div>
         </div>
   )

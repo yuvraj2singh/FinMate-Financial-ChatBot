@@ -42,7 +42,7 @@ const InputBar = () => {
         type="text"
         value={inputVal}
         onChange={(e) => setInputVal(e.target.value)}
-        placeholder="Ask Gemini"
+        placeholder="Ask FinMate"
       />
       <div
         onClick={SendPrompt}
